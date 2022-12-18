@@ -1,0 +1,90 @@
+<html>
+
+    <head>
+        <title>Reference</title>
+        <script language="JavaScript">
+         <!--
+         function flipflop( id )
+         {
+          element = document.getElementById( id );
+          if( element )   
+             element.style.display = element.style.display == "none" ? "" : "none";   
+         }
+         -->
+        </script>
+    </head>
+    <body>
+		<h1>СПРАВКА ПО РАБОТЕ С MoneyViewer</h1>
+        
+		<h2>1. Окно транзакций</h2>
+        <p><img src="image/transactionwindow.png" style="height:50%;"/></p>
+        <ul>
+            <h3><a href="javascript:flipflop('1');">Добавить / удалить транзакцию.</a></h3>
+                <ul id="1" style="display: none;">
+                <p style="margin-left: 50px"><img src="image/addtransaction.png" style=""/> - Кнопка создания новой транзакции. Нажмите, выберите категорию и сумму траты для транзакции и нажмите [Ок].</p>
+                <p><img src="image/adddialog.png" style=""/></p>
+                <p><img src="image/transactionelem.png" style=""/></p>
+                <p style="margin-left: 50px"><img src="image/deletetransaction.png" style=""/> - Кнопка удаления транзакции.</p>
+                </ul>
+            
+            <h3><a href="javascript:flipflop('2');">Фильтрация транзакций</a></h3>
+                <ul id="2" style="display: none;">
+                <p style="margin-left: 50px"><img src="image/filterall.png" style=""/> - Combobox для фильтрации по категории. Нажмите, в открытом списке выберите нужную категорию.</p>
+                <p><img src="image/filtercategories.png" style=""/></p>
+                <p style="margin-left: 50px"><img src="image/filterdate.png" style=""/> - Combobox для фильтрации по дате. Нажмите, в открытом списке выберите за какой промежуток времени хотите увидеть транзакции.</p>
+                <p><img src="image/filterdates.png" style=""/></p>   
+                <p style="margin-left: 50px"><img src="image/selecteddate.png" style=""/> - Отображение даты и фильтрация транза по дате. С помощью кнопок ">", "<" переключайтесь на нужную вам дату.</p>
+                </ul>
+            
+            <h3><a href="javascript:flipflop('3');">Баланс</a></h3>
+                <ul id="3" style="display: none;">
+                <p style="margin-left: 50px"><img src="image/balance.png" style=""/> - Строка для отображения баланса.</p>
+                </ul>
+        </ul>
+        
+        <h2>2. Вкладка целей и аккаунтов</h2>
+        <p><img src="image/accountsgoals.png"/></p>
+        <ul>
+            <h3><a href="javascript:flipflop('4');">Добавить, удалить цель / аккаунт</a></h3>
+                <ul id="4" style="display: none;">
+                <p style="margin-left: 50px"><img src="image/addaccountgoal.png" style=""/> - Кнопка добавления цели / аккаунта. Нажмите для добавления цели / аккаунта.</p>
+                <p style="margin-left: 50px"><img src="image/addgoal.png" style=""/> - Окно добавления цели. Введите имя для цели, сумму, что нужно достичь и нажмите [Ок].</p>
+                <p style="margin-left: 50px"><img src="image/addaccount.png" style=""/> - Окно добавления аккаунта. Введите имя для аккаунта и нажмите [Ок].</p>
+                <p style="margin-left: 50px"><img src="image/deletegoalaccount.png" style=""/> - Кнопка удаления цели / аккаунта. Нажмите для удаление цели / аккаунта.</p>
+                </ul>
+            <h3><a href="javascript:flipflop('5');">Выбор аккаунта</a></h3>
+                <ul id="5" style="display: none;">
+                <p style="margin-left: 50px"><img src="image/selectaccount.png" style=""/> - Для выбора аккаунта два раза нажмите на нужный аккаунт, после чего название аккаунта покрасится в красный .</p>
+                </ul>
+            <h3><a href="javascript:flipflop('6');">Пополнение цели</a></h3>
+                <ul id="6" style="display: none;">
+                <p style="margin-left: 50px"><img src="image/goalelem.png" style=""/> - Для пополнения цели два раза нажмите на нужную цель.</p>
+                <p style="margin-left: 50px"><img src="image/goalinput.png" style=""/> - В появившемся окне введите сумму пополнения и нажмите [Ок].</p>
+            </ul>
+        </ul>
+
+        <h2>3. График расходов</h2>
+        <p><img src="image/graphtab.png"/></p>
+        <ul>
+            <h3><a href="javascript:flipflop('7');">График</a></h3>
+                <ul id="7" style="display: none;">
+                    <p style="margin-left: 50px"><img src="image/graph.png" style=""/> - График отображения расходов за год.</p>
+                </ul>
+        </ul>
+
+        <h2>4. Вкладка целей и аккаунтов</h2>
+        <p><img src="image/categoriatab.png"/></p>
+        <ul>
+            <h3><a href="javascript:flipflop('8');">Диаграмма расходов</a></h3>
+                <ul id="8" style="display: none;">
+                <p style="margin-left: 50px"><img src="image/categoriadiagram.png" style=""/> - Диаграмма, отображающая расходы по категориям за выбранный период.</p>
+                </ul>
+            <h3><a href="javascript:flipflop('9');">Добавить, удалить категорию</a></h3>
+                <ul id="9" style="display: none;">
+                <p style="margin-left: 50px"><img src="image/categorialist.png" style=""/> - Список категорий.</p>
+                <p style="margin-left: 50px"><img src="image/addaccountgoal.png" style=""/> - Кнопка добавления категории. Нажмите для добавления категории.</p>
+                <p style="margin-left: 50px"><img src="image/addcategoria.png" style=""/> - Окно добавления категории. Введите имя для категории и нажмите [Ок].</p>
+                <p style="margin-left: 50px"><img src="image/deletegoalaccount.png" style=""/> - Кнопка удаления категории. Нажмите для удаление категории.</p>
+                </ul>
+    </body>
+</html>

@@ -35,8 +35,8 @@ class AppData(QWidget):
         self.timePeriod = TimePeriod.Month
 
         self.timePeriods = {
-            TimePeriod.Month : lambda t: t.registDate.month == self.selectedDate.month,
-            TimePeriod.Day: lambda t: t.registDate == self.selectedDate,
+            TimePeriod.Month : lambda t: t.registDate.year == self.selectedDate.year and t.registDate.month == self.selectedDate.month,
+            TimePeriod.Day: lambda t: t.registDate.year == self.selectedDate.year and t.registDate.month == self.selectedDate.month and t.registDate.day == self.selectedDate.day,
             TimePeriod.Year: lambda t: t.registDate.year == self.selectedDate.year
             }
 
@@ -97,12 +97,15 @@ class AppData(QWidget):
 
 #---Categories---------------------------------------------------
 
+    def get_selected_categoria(self):
+        return self.selectedCategoria
+
     def get_categories(self):
         return Linq.to_list(Linq.select(self.categories, lambda c: c["categoria"]))
 
     def get_categories_with_expense(self):
         return self.categories
-    
+
     def get_categoria_by_name(self, name: str):
         for cat in self.categories:
             if cat["categoria"].name == name:
@@ -123,8 +126,8 @@ class AppData(QWidget):
 
         self.dbContext.remove_categoria_by_id_with_transactions(id)
 
-        self.update_categorias_list()
         self.update_transactions_list()
+        self.update_categorias_list()
         self.update_balance(-categoriaExpenses)
 
     def update_categorias_list(self):
@@ -165,8 +168,8 @@ class AppData(QWidget):
 
         self.update_categorias_list()
 
-    def slot_delete_transaction(self, tran: Transaction):
-        self.dbContext.remove_transaction(tran.id)
+    def slot_delete_transaction(self, id: int):
+        self.dbContext.remove_transaction(id)
 
         self.update_transactions_list()
 
@@ -182,6 +185,8 @@ class AppData(QWidget):
         self.filter_for_date()
 
         self.filter_for_categoria()
+
+        self.update_categorias_list()
 
         self.signalTransactionsUpdate.emit()
 
@@ -245,6 +250,10 @@ class AppData(QWidget):
 
         accounts = self.dbContext.get_accounts()
 
+        if len(accounts) == 0:
+            self.add_account("Cash")
+            accounts = self.dbContext.get_accounts()
+
         for acc in accounts:
             self.accounts[acc.id] = {"account": acc, "balance": Linq.sum(
                 Linq.where(
@@ -267,7 +276,5 @@ class AppData(QWidget):
         self.signalBalanceUpdate.emit()
 
         self.update_transactions_list()
-
-        self.update_goals_list()
-
         self.update_categorias_list()
+        self.update_goals_list()

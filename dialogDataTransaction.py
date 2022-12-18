@@ -16,7 +16,12 @@ class InputDialogTransaction(QDialog):
 
         self.initUI()
 
-    def initUI(self):
+    def initUI(self):      
+        self.setStyleSheet("""
+            background-color: #C9C7C7
+        """)
+
+
         layout = QVBoxLayout()
         self.setLayout(layout)
 
@@ -24,6 +29,10 @@ class InputDialogTransaction(QDialog):
 
         # self.tabWidget = QTabWidget()
         # self.tabWidget.addTab(self, "Graph")
+        
+        self.labelExpense = QLabel(self)
+        self.labelExpense.setText("Expense")
+        layout.addWidget(self.labelExpense)
 
         self.__lineEditExpense = QLineEdit(self)
         layout.addWidget(self.__lineEditExpense)
@@ -32,17 +41,20 @@ class InputDialogTransaction(QDialog):
         self.comboboxCategoria.addItems(Linq.to_list(Linq.select(self.appData.get_categories(), lambda c: c.name)))
         layout.addWidget(self.comboboxCategoria)
 
-        self.labelExpense = QLabel(self)
-        self.labelExpense.setText("Expense")
-        layout.addWidget(self.labelExpense)
+
+
+        subWidget = QWidget()
+        subLayout = QHBoxLayout()
+        subWidget.setLayout(subLayout)
+        layout.addWidget(subWidget)
 
         self.btnOk = QPushButton("Ok", self)
         self.btnOk.clicked.connect(self.evt_btn_ok_clicked)
-        layout.addWidget(self.btnOk)
+        subLayout.addWidget(self.btnOk)
 
         self.btnCancel = QPushButton("Cancel", self)
         self.btnCancel.clicked.connect(self.evt_btn_cancel_clicked)
-        layout.addWidget(self.btnCancel)
+        subLayout.addWidget(self.btnCancel)
 
         # layout.addWidget(self.tabWidget)
 

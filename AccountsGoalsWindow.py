@@ -14,6 +14,49 @@ class MyQListWidgetItem(QListWidgetItem):
 
         self.id = id
 
+class MyQWidget(QWidget):
+    def __init__(self, account: Account, balance: str, slot_delete):
+        super().__init__()
+
+        itemLayout = QHBoxLayout()
+
+        self.itemLabelName = QLabel(str(account))
+        self.itemLabelName.setStyleSheet("""
+                QLabel {
+                    color: #000000;
+                    font-size: 15px;  }
+                        """)
+        itemLayout.addWidget(self.itemLabelName)
+
+        self.itemLabelBalance = QLabel(balance)        
+        self.itemLabelBalance.setStyleSheet("""
+                QLabel {
+                    font-size: 15px;  }
+                        """)
+        self.itemLabelBalance.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignCenter)
+        itemLayout.addWidget(self.itemLabelBalance)
+
+        buttonDelete = QPushButton("-")
+        buttonDelete.setMinimumWidth(25)
+        buttonDelete.setMaximumWidth(25)
+        buttonDelete.setStyleSheet("""
+                QPushButton {
+                    background: #D9D9D9;  
+                    border-style: solid;
+                    border-width: 2px;
+                    border-radius: 8px;
+                    border-color: #D9D9D9;
+                    font-size: 15px;}
+                        """)
+        buttonDelete.clicked.connect(slot_delete(account.id))
+        itemLayout.addWidget(buttonDelete)
+
+        self.setLayout(itemLayout)
+
+    def set_color(self, color: str):
+        self.itemLabelName.setStyleSheet("QLabel { color: %s; font-size: 15px; }" % (color))
+
+
 class AccoountsGoalsWindow(QWidget):
     signalSelectedAccount = pyqtSignal(int)
 
@@ -39,10 +82,19 @@ class AccoountsGoalsWindow(QWidget):
     
 
     def initUI(self):
+        headersColor = "A8A8A8"
+
         layout = QVBoxLayout(self)
         self.setLayout(layout)
 
         labelAccounts = QLabel("Accounts")
+        labelAccounts.setStyleSheet(
+                """
+                QLabel {
+                    font-size: 16px;
+                    color: #%s;
+                }
+                """ % headersColor)
         layout.addWidget(labelAccounts)
         
         self.listWidgetAccounts = QListWidget()
@@ -52,6 +104,13 @@ class AccoountsGoalsWindow(QWidget):
         self.slot_update_accounts_list_widget()
 
         labelGoals = QLabel("Goals")
+        labelGoals.setStyleSheet(
+                """
+                QLabel {
+                    font-size: 16px;
+                    color: #%s;
+                }
+                """ % headersColor)
         layout.addWidget(labelGoals)
 
         self.listWidgetGoals = QListWidget()
@@ -62,10 +121,17 @@ class AccoountsGoalsWindow(QWidget):
 
     def add_button_to_list_widget(self, listWidget: QListWidget, event):
         buttonAddAccount = QPushButton("+")
+        buttonAddAccount.setMaximumWidth(25)
+        buttonAddAccount.setStyleSheet("""
+            QPushButton {
+                background: #EFEFEF;
+                border: none;
+                font-size: 18px;  }
+                    """)
         buttonAddAccount.clicked.connect(event)        
         
         itemLayout = QHBoxLayout()
-        itemLayout.addWidget(buttonAddAccount)
+        itemLayout.addWidget(buttonAddAccount, 1, alignment = Qt.AlignmentFlag.AlignLeft)
 
         itemWidget  = QWidget()
         itemWidget.setLayout(itemLayout)
@@ -81,17 +147,7 @@ class AccoountsGoalsWindow(QWidget):
         self.listWidgetAccounts.clear()
 
         for account in self.appData.get_accounts():
-            itemLayout = QHBoxLayout()
-
-            itemLabel = QLabel(str(account) + "\t" + str(self.appData.get_balance_by_account_id(account.id)))
-            itemLayout.addWidget(itemLabel)
-
-            buttonDelete = QPushButton("-")
-            buttonDelete.clicked.connect(self.slot_delete_account(account.id))
-            itemLayout.addWidget(buttonDelete)
-
-            itemWidget = QWidget()
-            itemWidget.setLayout(itemLayout)
+            itemWidget = MyQWidget(account,  str(self.appData.get_balance_by_account_id(account.id)), self.slot_delete_account)
 
             newItem = MyQListWidgetItem(account.id)
             newItem.setSizeHint(self.itemsSize)
@@ -99,10 +155,8 @@ class AccoountsGoalsWindow(QWidget):
             self.listWidgetAccounts.setItemWidget(newItem, itemWidget)
 
         for i in range(len(self.listWidgetAccounts)):
-            if self.listWidgetAccounts.item(i) == self.appData.get_account_id():
-                self.listWidgetAccounts.item(i).setForeground(Qt.GlobalColor.red)
-
-        # self.listWidgetAccounts.item().setForeground(Qt.GlobalColor.red)
+            if self.listWidgetAccounts.item(i).id == self.appData.get_account_id():
+                self.listWidgetAccounts.itemWidget(self.listWidgetAccounts.item(i)).set_color("red")
 
         self.add_button_to_list_widget(self.listWidgetAccounts, self.slot_add_account)
 
@@ -113,11 +167,25 @@ class AccoountsGoalsWindow(QWidget):
                 itemLayout = QHBoxLayout()
 
                 itemLabel = QLabel(str(goal))
+                itemLabel.setStyleSheet("""
+                QLabel {
+                    font-size: 15px;  }
+                        """)
                 itemLayout.addWidget(itemLabel)
                 
-                progressBar = QProgressBar()
+                progressBar = QProgressBar(textVisible=False)
                 progressBar.setMinimum(0)
                 progressBar.setMaximum(goal.finishMoneyAmount)
+                progressBar.setStyleSheet(
+                    """
+                    QProgressBar {
+                        border-radius: 6px;
+                        min-height: 5px;
+                        max-height: 8px;
+                        background-color: #D9D9D9;
+                    }
+                    """
+                )
 
                 if goal.moneyAmount > goal.finishMoneyAmount:
                     progressBar.setValue(goal.finishMoneyAmount)
@@ -126,6 +194,18 @@ class AccoountsGoalsWindow(QWidget):
                 itemLayout.addWidget(progressBar)
 
                 buttonDelete = QPushButton("-")
+                buttonDelete.setMinimumWidth(25)
+                buttonDelete.setMaximumWidth(25)
+                buttonDelete.setStyleSheet("""
+                QPushButton {
+                    background: #D9D9D9;  
+                    border-style: solid;
+                    border-width: 2px;
+                    border-radius: 8px;
+                    border-color: #D9D9D9;
+                    font-size: 15px; }
+                        """)
+
                 buttonDelete.clicked.connect(self.slot_delete_goal(goal.id))
                 itemLayout.addWidget(buttonDelete)
 
@@ -148,11 +228,7 @@ class AccoountsGoalsWindow(QWidget):
         def delete_account():
             self.appData.remove_account_by_id(id)
 
-            if self.listWidgetAccounts.count() > 1:
-                self.slot_select_account(MyQListWidgetItem(self.listWidgetAccounts.item(0)))
-                return
-            
-            self.appData.add_account("Cash")
+            self.slot_select_account(self.listWidgetAccounts.item(0))
 
         return delete_account
 
@@ -175,18 +251,20 @@ class AccoountsGoalsWindow(QWidget):
             self.appData.add_goal(dlgWindow.goalName, 0, dlgWindow.goalFinishMoneyAmount)
 
     def slot_add_money_to_goal(self, item: MyQListWidgetItem):
+        try:
+            tmp = item.id
+        except:
+            return
+
         dlgWindow = DlgInputWindow("Type money for goal", int)
 
         if dlgWindow.exec():
             self.appData.update_goal_by_id(item.id, int(dlgWindow.lineEditInput.text()))
 
     def slot_select_account(self, item: MyQListWidgetItem):
-        
-        for i in range(self.listWidgetAccounts.count()):
-            self.listWidgetAccounts.item(i).setForeground(self.defultColorText)
-
-        item.setForeground(self.selectedAccountColorText)
-
-        self.signalSelectedAccount.emit(item.id)
+        try:
+            self.signalSelectedAccount.emit(item.id)
+        except:
+            print("It wasn`t elem of list")
 
 

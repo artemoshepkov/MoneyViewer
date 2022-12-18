@@ -24,8 +24,9 @@ class ListWindow(QWidget):
 
     signalAddTransaction = pyqtSignal(int, date, float)
 
-    signalDeleteTransaction = pyqtSignal(Transaction)
-    def __init__(self, appData: AppData):
+    signalDeleteTransaction = pyqtSignal(int)
+
+    def __init__(self, appData: AppData, objectsColor: str):
         super().__init__()
 
         self.appData = appData
@@ -39,7 +40,11 @@ class ListWindow(QWidget):
 
         self.itemSize = QSize(50, 50)
 
+        self.objectsColor = objectsColor
+
         self.setFixedSize(260, 320)
+
+        self.categoriaName = "All"
 
         self.initUI()
 
@@ -48,21 +53,40 @@ class ListWindow(QWidget):
         self.setLayout(layout)
 
         self.comboboxCategoriaFilter = QComboBox(self)
+        self.comboboxCategoriaFilter.setMinimumSize(150, 30)
+        self.comboboxCategoriaFilter.setMaximumSize(150, 30)
+        self.comboboxCategoriaFilter.setStyleSheet("""
+        QComboBox {
+            background-color: #%s;
+            font-size: 14px;
+            }""" % self.objectsColor)
         self.update_combobox_categories()
         self.comboboxCategoriaFilter.activated.connect(self.slot_filter)
-        layout.addWidget(self.comboboxCategoriaFilter)
+        layout.addWidget(self.comboboxCategoriaFilter, 1, Qt.AlignmentFlag.AlignHCenter)
 
         self.listWidgetTransactions = QListWidget(self)
+        self.listWidgetTransactions.setStyleSheet("background-color: #%s" % self.objectsColor)
         self.slot_update_listWidget()
         layout.addWidget(self.listWidgetTransactions)
 
         self.btnAdd = QPushButton("+")
+        self.btnAdd.setMaximumSize(50, 50)
+        self.btnAdd.setMinimumSize(50, 50)
+        self.btnAdd.setStyleSheet(
+            """
+                QPushButton {
+                    border-style: solid;
+                    border-width: 2px;
+                    border-radius: 25px;
+                    background-color: #%s;
+                    font-size: 20px;
+                    text-align: center;
+                    }
+                }
+            """ % self.objectsColor
+        )
         self.btnAdd.clicked.connect(self.slot_btn_add_clicked)
-        layout.addWidget(self.btnAdd)
-
-        self.btnDelete = QPushButton("-")
-        self.btnDelete.clicked.connect(self.slot_btn_delete_clicked)
-        layout.addWidget(self.btnDelete)
+        layout.addWidget(self.btnAdd, 1, alignment = Qt.AlignmentFlag.AlignRight)
 
     def update_combobox_categories(self):
         self.comboboxCategoriaFilter.clear()
@@ -71,6 +95,8 @@ class ListWindow(QWidget):
         categories.insert(0, "All")
 
         self.comboboxCategoriaFilter.addItems(categories)
+
+        self.comboboxCategoriaFilter.setCurrentText(self.categoriaName)
 
     def slot_btn_add_clicked(self) -> None:
         if len(self.appData.get_categories()) == 0:
@@ -82,17 +108,18 @@ class ListWindow(QWidget):
         if dlgTransaction.exec():
             self.signalAddTransaction.emit(dlgTransaction.categoria, dlgTransaction.registDate, -dlgTransaction.payment)
             
-    def slot_btn_delete_clicked(self) -> None:
-        deletedItem = self.listWidgetTransactions.takeItem(self.listWidgetTransactions.currentRow())
+    def slot_btn_delete_clicked(self, id: int) -> None:
+        def delete_transaction():
+            self.signalDeleteTransaction.emit(id)
 
-        self.signalDeleteTransaction.emit(deletedItem.id)
+        return delete_transaction
 
     def slot_filter(self):
-        categoriaName = self.comboboxCategoriaFilter.currentText()
-        if categoriaName == "All":
+        self.categoriaName = self.comboboxCategoriaFilter.currentText()
+        if self.categoriaName == "All":
             self.signalCategoriaChanged.emit(0)
         else:
-            self.signalCategoriaChanged.emit(self.appData.get_categoria_by_name(categoriaName).id)
+            self.signalCategoriaChanged.emit(self.appData.get_categoria_by_name(self.categoriaName).id)
 
     def slot_update_listWidget(self):
         self.listWidgetTransactions.clear()
@@ -102,17 +129,62 @@ class ListWindow(QWidget):
             categories[c.id] = c.name
 
         if len(categories) == 0:
-            print("Categories list is null")
             return
 
         transactions = self.appData.get_transactions()
 
         if len(transactions) == 0:
-            print("Transactions list is null")
             return
 
         for item in transactions:
-            newItem = QListWidgetItem(categories[item.categoriaId] + "\t" + str(item))
+            itemWidget = QWidget()
+
+            itemLayout = QHBoxLayout()
+            itemWidget.setLayout(itemLayout)
+
+            itemLabelCateg = QLabel(categories[item.categoriaId])
+            itemLabelCateg.setStyleSheet(
+                """
+                QLabel {
+                    font-size: 14px;
+                }
+                """
+            )
+            itemLayout.addWidget(itemLabelCateg)
+
+            itemLabelPayment = QLabel(str(item)) 
+            itemLabelPayment.setStyleSheet(
+                """
+                QLabel {
+                    font-size: 14px;
+                }
+                """
+            )
+            itemLayout.addWidget(itemLabelPayment, 1, Qt.AlignmentFlag.AlignRight)
+
+            btnDelete = QPushButton("-")
+            btnDelete.setStyleSheet("""
+            QPushButton {
+                background: #%s;
+                font-size: 18px;
+                width: 25px;
+                height: 15px;
+                border-style: solid;
+                border-width: 1px;
+                border-color: black;
+                border-radius: 7px; }
+                    """ % self.objectsColor)
+            btnDelete.clicked.connect(self.slot_btn_delete_clicked(item.id))
+            itemLayout.addWidget(btnDelete)
+
+            newItem = QListWidgetItem()
             newItem.setSizeHint(self.itemSize)
+
             self.listWidgetTransactions.addItem(newItem)
+            self.listWidgetTransactions.setItemWidget(newItem, itemWidget)
+
+
+
+
+
 

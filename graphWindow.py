@@ -32,29 +32,26 @@ class GraphWindow(QWidget):
         self.update_graph_to_year()
 
     def update_graph_to_year(self):
-
-        months = ("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")
-
         barSets = []
 
         tmpBarSets = {}
 
         categories = self.appData.get_categories()
 
-        if len(categories) == 0:
-            # print("Categories is null")
-            return
-
+        index = 0
+        indexes = {}
         for categoria in categories:
             barSets.append(QBarSet(categoria.name))
             tmpBarSets[categoria.id] = [0,0,0,0,0,0,0,0,0,0,0,0]
+            indexes[index] = categoria.id
+            index += 1
 
+        if len(categories) > 0:
+            for tran in self.appData.get_transactions():
+                tmpBarSets[tran.categoriaId][tran.registDate.month - 1] = -tran.payment
 
-        # for tran in self.appData.get_transactions():
-        #     tmpBarSets[tran.categoriaId][tran.registDate.month - 1] = tran.payment
-
-        # for i in range(len(barSets)):
-        #     barSets[i].append(tmpBarSets[i])
+        for i in range(len(barSets)):
+            barSets[i].append(tmpBarSets[indexes[i]])
 
         barSeries = QBarSeries()
 
@@ -65,19 +62,23 @@ class GraphWindow(QWidget):
         newChart.addSeries(barSeries)
         newChart.setTitle("Expenses")
 
-        axisX = QBarCategoryAxis()
-        axisX.append(months)
+        newChart.createDefaultAxes()
 
-        axisY = QValueAxis()
+        # months = ("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")
 
-        max = Linq.max(self.appData.get_transactions(), lambda t: t.payment)
-        if max is None:
-            max = 1000
+        # axisX = QBarCategoryAxis()
+        # axisX.append(months)
 
-        axisY.setRange(0, max)
+        # axisY = QValueAxis()
 
-        newChart.addAxis(axisX, Qt.AlignmentFlag.AlignBottom)
-        newChart.addAxis(axisY, Qt.AlignmentFlag.AlignLeft)        
+        # max = Linq.max(self.appData.get_transactions(), lambda t: t.payment)
+        # if max is None:
+        #     max = 1000
+
+        # axisY.setRange(0, max)
+
+        # newChart.addAxis(axisX, Qt.AlignmentFlag.AlignBottom)
+        # newChart.addAxis(axisY, Qt.AlignmentFlag.AlignLeft)        
         
         newChart.legend().setVisible(True)
         newChart.legend().setAlignment(Qt.AlignmentFlag.AlignBottom)

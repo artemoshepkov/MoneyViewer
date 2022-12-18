@@ -4,8 +4,14 @@ class DlgGoalWindow(QDialog):
     def __init__(self):
         super().__init__()
 
+        self.setWindowTitle("Add goal")
+
         self.goalName = ""
         self.goalFinishMoneyAmount = -1
+
+        self.setStyleSheet("""
+            background-color: #C9C7C7
+        """)
 
         layout = QVBoxLayout(self)
         self.setLayout(layout)

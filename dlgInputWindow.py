@@ -8,9 +8,15 @@ class DlgInputWindow(QDialog):
 
         self.input = None
 
+        self.setWindowTitle("Input")
+
         self.initUI(textForInput)
 
     def initUI(self, textForInput: str):
+        self.setStyleSheet("""
+            background-color: #C9C7C7
+        """)
+
         layout = QVBoxLayout(self)
         self.setLayout(layout)
 
