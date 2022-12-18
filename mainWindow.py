@@ -34,6 +34,8 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
+        self.setWindowIcon(QIcon("icon.png"))
+
         self.appData = AppData("money_viewer.db")
         
         self.appData.signalBalanceUpdate.connect(self.update_balance)
