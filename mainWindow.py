@@ -25,7 +25,7 @@ class HtmlWindow(QMainWindow):
         self.browser = QtWebEngineWidgets.QWebEngineView()
         self.browser.load(QUrl('file:///' + os.path.abspath("HTML/index.html").replace("\\","/")))
         self.setCentralWidget(self.browser)
-        self.button = QPushButton('Выйти из справки', self)
+        self.button = QPushButton('Exit', self)
         self.button.setFixedSize(100,50)
         self.button.move(800, 680) 
         self.button.clicked.connect(self.close)
@@ -119,7 +119,7 @@ class MainWindow(QMainWindow):
         groupBoxLayout.addWidget(self.calendar, 1, alignment=Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignHCenter)
 
         self.listWidgetTransactions = ListWindow(self.appData, objectsColor)
-        self.listWidgetTransactions.setMinimumHeight(400)
+        self.listWidgetTransactions.setMinimumHeight(425)
         groupBoxLayout.addWidget(self.listWidgetTransactions, 1, alignment=Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignTop)
 
     def init_right_part(self):

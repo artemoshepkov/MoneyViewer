@@ -120,18 +120,17 @@ class AccoountsGoalsWindow(QWidget):
         self.slot_update_goals_list_widget()
 
     def add_button_to_list_widget(self, listWidget: QListWidget, event):
-        buttonAddAccount = QPushButton("+")
-        buttonAddAccount.setMaximumWidth(25)
-        buttonAddAccount.setStyleSheet("""
+        buttonAdd = QPushButton("+")
+        buttonAdd.setMaximumWidth(33)
+        buttonAdd.setStyleSheet("""
             QPushButton {
-                background: #EFEFEF;
-                border: none;
+                border-style: solid;
                 font-size: 18px;  }
                     """)
-        buttonAddAccount.clicked.connect(event)        
+        buttonAdd.clicked.connect(event)        
         
         itemLayout = QHBoxLayout()
-        itemLayout.addWidget(buttonAddAccount, 1, alignment = Qt.AlignmentFlag.AlignLeft)
+        itemLayout.addWidget(buttonAdd, 1, alignment = Qt.AlignmentFlag.AlignLeft)
 
         itemWidget  = QWidget()
         itemWidget.setLayout(itemLayout)
