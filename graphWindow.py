@@ -16,9 +16,9 @@ class GraphWindow(QWidget):
 
         self.appData = appData
 
-        self.appData.signalTransactionsUpdate.connect(self.update_graph_to_year)
+        self.appData.signalGraphUpdate.connect(self.update_graph)
 
-        self.appData.signalCategoriesUpdate.connect(self.update_graph_to_year)
+        self.appData.signalGraphUpdate.connect(self.update_graph)
 
         self.initUI()
     
@@ -29,7 +29,34 @@ class GraphWindow(QWidget):
         self.chartView = QChartView()
         layout.addWidget(self.chartView)
 
-        self.update_graph_to_year()
+        self.update_graph_to_month()
+
+    def update_graph(self, d: TimePeriod):
+        if d == TimePeriod.Month or d == TimePeriod.Day:
+            self.update_graph_to_month()
+        elif d == TimePeriod.Year:
+            self.update_graph_to_year()
+
+    def update_graph_to_month(self):
+        barSets = []
+
+        tmpBarSets = {}
+
+        categories = self.appData.get_categories()
+
+        index = 0
+        indexes = {}
+        for categoria in categories:
+            barSets.append(QBarSet(categoria.name))
+            tmpBarSets[categoria.id] = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+            indexes[index] = categoria.id
+            index += 1
+
+        if len(categories) > 0:
+            for tran in self.appData.get_transactions():
+                tmpBarSets[tran.categoriaId][tran.registDate.day - 1] = -tran.payment
+
+        self.set_graph(tmpBarSets, barSets, indexes)
 
     def update_graph_to_year(self):
         barSets = []
@@ -50,6 +77,11 @@ class GraphWindow(QWidget):
             for tran in self.appData.get_transactions():
                 tmpBarSets[tran.categoriaId][tran.registDate.month - 1] = -tran.payment
 
+        self.set_graph(tmpBarSets, barSets, indexes)
+
+
+
+    def set_graph(self, tmpBarSets, barSets, indexes):
         for i in range(len(barSets)):
             barSets[i].append(tmpBarSets[indexes[i]])
 
@@ -62,26 +94,9 @@ class GraphWindow(QWidget):
         newChart.addSeries(barSeries)
         newChart.setTitle("Expenses")
 
-        newChart.createDefaultAxes()
-
-        # months = ("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")
-
-        # axisX = QBarCategoryAxis()
-        # axisX.append(months)
-
-        # axisY = QValueAxis()
-
-        # max = Linq.max(self.appData.get_transactions(), lambda t: t.payment)
-        # if max is None:
-        #     max = 1000
-
-        # axisY.setRange(0, max)
-
-        # newChart.addAxis(axisX, Qt.AlignmentFlag.AlignBottom)
-        # newChart.addAxis(axisY, Qt.AlignmentFlag.AlignLeft)        
+        newChart.createDefaultAxes()     
         
         newChart.legend().setVisible(True)
         newChart.legend().setAlignment(Qt.AlignmentFlag.AlignBottom)
 
         self.chartView.setChart(newChart)
-

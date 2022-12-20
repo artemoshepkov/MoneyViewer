@@ -1,0 +1,50 @@
+<html>
+
+    <head>
+        <title>Reference</title>
+        <script language="JavaScript">
+         <!--
+         function flipflop( id )
+         {
+          element = document.getElementById( id );
+          if( element )   
+             element.style.display = element.style.display == "none" ? "" : "none";   
+         }
+         -->
+        </script>
+    </head>
+    <body>
+		<h1>СПРАВКА ПО РАБОТЕ С MoneyViewer</h1>
+        <button onclick="window.location='index.html'">FAQ</button>
+        <button onclick="window.location='1.html'">Окно транзакций</button>
+        <button onclick="window.location='2.html'">Вкладка целей и аккаунтов</button>
+        <button onclick="window.location='3.html'">График расходов</button>
+        <button onclick="window.location='4.html'">Диаграмма расходов</button>
+
+		<h2>1. Окно транзакций</h2>
+        <p><img src="image/transactionwindow.png" style="height:50%;"/></p>
+        <ul>
+            <h3><a href="javascript:flipflop('1');">Добавить / удалить транзакцию.</a></h3>
+                <ul id="1" style="display: none;">
+                <p style="margin-left: 50px"><img src="image/addtransaction.png" style=""/> - Кнопка создания новой транзакции. Нажмите, выберите категорию и сумму траты для транзакции и нажмите [Ок].</p>
+                <p><img src="image/adddialog.png" style=""/></p>
+                <p><img src="image/transactionelem.png" style=""/></p>
+                <p style="margin-left: 50px"><img src="image/deletetransaction.png" style=""/> - Кнопка удаления транзакции.</p>
+                </ul>
+            
+            <h3><a href="javascript:flipflop('2');">Фильтрация транзакций</a></h3>
+                <ul id="2" style="display: none;">
+                <p style="margin-left: 50px"><img src="image/filterall.png" style=""/> - Combobox для фильтрации по категории. Нажмите, в открытом списке выберите нужную категорию.</p>
+                <p><img src="image/filtercategories.png" style=""/></p>
+                <p style="margin-left: 50px"><img src="image/filterdate.png" style=""/> - Combobox для фильтрации по дате. Нажмите, в открытом списке выберите за какой промежуток времени хотите увидеть транзакции.</p>
+                <p><img src="image/filterdates.png" style=""/></p>   
+                <p style="margin-left: 50px"><img src="image/selecteddate.png" style=""/> - Отображение даты и фильтрация транза по дате. С помощью кнопок ">", "<" переключайтесь на нужную вам дату.</p>
+                </ul>
+            
+            <h3><a href="javascript:flipflop('3');">Баланс</a></h3>
+                <ul id="3" style="display: none;">
+                <p style="margin-left: 50px"><img src="image/balance.png" style=""/> - Строка для отображения баланса.</p>
+                </ul>
+        </ul>
+    </body>
+</html>

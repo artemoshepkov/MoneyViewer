@@ -1,0 +1,45 @@
+<html>
+
+    <head>
+        <title>Reference</title>
+        <script language="JavaScript">
+         <!--
+         function flipflop( id )
+         {
+          element = document.getElementById( id );
+          if( element )   
+             element.style.display = element.style.display == "none" ? "" : "none";   
+         }
+         -->
+        </script>
+    </head>
+    <body>
+		<h1>СПРАВКА ПО РАБОТЕ С MoneyViewer</h1>
+        <button onclick="window.location='index.html'">FAQ</button>
+        <button onclick="window.location='1.html'">Окно транзакций</button>
+        <button onclick="window.location='2.html'">Вкладка целей и аккаунтов</button>
+        <button onclick="window.location='3.html'">График расходов</button>
+        <button onclick="window.location='4.html'">Диаграмма расходов</button>
+        
+        <h2>2. Вкладка целей и аккаунтов</h2>
+        <p><img src="image/accountsgoals.png"/></p>
+        <ul>
+            <h3><a href="javascript:flipflop('4');">Добавить, удалить цель / аккаунт</a></h3>
+                <ul id="4" style="display: none;">
+                <p style="margin-left: 50px"><img src="image/addaccountgoal.png" style=""/> - Кнопка добавления цели / аккаунта. Нажмите для добавления цели / аккаунта.</p>
+                <p style="margin-left: 50px"><img src="image/addgoal.png" style=""/> - Окно добавления цели. Введите имя для цели, сумму, что нужно достичь и нажмите [Ок].</p>
+                <p style="margin-left: 50px"><img src="image/addaccount.png" style=""/> - Окно добавления аккаунта. Введите имя для аккаунта и нажмите [Ок].</p>
+                <p style="margin-left: 50px"><img src="image/deletegoalaccount.png" style=""/> - Кнопка удаления цели / аккаунта. Нажмите для удаление цели / аккаунта.</p>
+                </ul>
+            <h3><a href="javascript:flipflop('5');">Выбор аккаунта</a></h3>
+                <ul id="5" style="display: none;">
+                <p style="margin-left: 50px"><img src="image/selectaccount.png" style=""/> - Для выбора аккаунта два раза нажмите на нужный аккаунт, после чего название аккаунта покрасится в красный .</p>
+                </ul>
+            <h3><a href="javascript:flipflop('6');">Пополнение цели</a></h3>
+                <ul id="6" style="display: none;">
+                <p style="margin-left: 50px"><img src="image/goalelem.png" style=""/> - Для пополнения цели два раза нажмите на нужную цель.</p>
+                <p style="margin-left: 50px"><img src="image/goalinput.png" style=""/> - В появившемся окне введите сумму пополнения и нажмите [Ок].</p>
+            </ul>
+        </ul>
+    </body>
+</html>

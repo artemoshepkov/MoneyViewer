@@ -169,5 +169,13 @@ class MainWindow(QMainWindow):
             for tran in transactions:
                 writer.writerow([categories[tran.categoriaId], str(tran.registDate), str(tran.payment)])
 
+        reply = QMessageBox.question(self, 'Open file',"Do you wanna open it?", QMessageBox.StandardButton.Yes, QMessageBox.StandardButton.No)
+
+        if reply == QMessageBox.StandardButton.No:
+            return
+
+        os.system(fileName[0])
+        
+
     def slot_open_reference(self):
         self.htmlwindow.show()

@@ -19,6 +19,8 @@ class AppData(QWidget):
 
     signalBalanceUpdate = pyqtSignal()
 
+    signalGraphUpdate = pyqtSignal(TimePeriod)
+
     def __init__(self, dbPath: str):
         super().__init__()
 
@@ -150,6 +152,7 @@ class AppData(QWidget):
             })
 
         self.signalCategoriesUpdate.emit()
+        self.signalGraphUpdate.emit(self.timePeriod)
 
 #---Transactions---------------------------------------------------
 
@@ -171,6 +174,8 @@ class AppData(QWidget):
     def slot_delete_transaction(self, id: int):
         self.dbContext.remove_transaction(id)
 
+        self.update_accounts_list()
+
         self.update_transactions_list()
 
         self.update_categorias_list()
@@ -189,6 +194,7 @@ class AppData(QWidget):
         self.update_categorias_list()
 
         self.signalTransactionsUpdate.emit()
+        self.signalGraphUpdate.emit(self.timePeriod)
 
 #---Goal---------------------------------------------------
     

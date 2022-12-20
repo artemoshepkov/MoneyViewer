@@ -155,6 +155,11 @@ class CategoriaWindow(QWidget):
 
     def slot_remove_categoria(self, id: int):
         def remove_categoria():
+            reply = QMessageBox.question(self, 'Attention',"Are you sure to delete it?", QMessageBox.StandardButton.Ok, QMessageBox.StandardButton.Cancel)
+
+            if reply == QMessageBox.StandardButton.Cancel:
+                return
+
             self.appData.remove_categoria_by_id(id)
 
         return remove_categoria

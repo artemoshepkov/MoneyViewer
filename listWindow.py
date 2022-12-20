@@ -110,6 +110,11 @@ class ListWindow(QWidget):
             
     def slot_btn_delete_clicked(self, id: int) -> None:
         def delete_transaction():
+            reply = QMessageBox.question(self, 'Attention',"Are you sure to delete it?", QMessageBox.StandardButton.Ok, QMessageBox.StandardButton.Cancel)
+
+            if reply == QMessageBox.StandardButton.Cancel:
+                return
+                
             self.signalDeleteTransaction.emit(id)
 
         return delete_transaction

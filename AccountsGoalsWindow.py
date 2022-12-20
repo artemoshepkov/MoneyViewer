@@ -1,4 +1,5 @@
 from PyQt6.QtWidgets import *
+from PyQt6.QtWidgets import QMessageBox
 from PyQt6.QtCore import Qt, QSize, pyqtSignal
 
 from Model.dbContext import *
@@ -225,6 +226,11 @@ class AccoountsGoalsWindow(QWidget):
 
     def slot_delete_account(self, id: int):
         def delete_account():
+            reply = QMessageBox.question(self, 'Attention',"Are you sure to delete it?", QMessageBox.StandardButton.Ok, QMessageBox.StandardButton.Cancel)
+
+            if reply == QMessageBox.StandardButton.Cancel:
+                return
+
             self.appData.remove_account_by_id(id)
 
             self.slot_select_account(self.listWidgetAccounts.item(0))
@@ -233,6 +239,11 @@ class AccoountsGoalsWindow(QWidget):
 
     def slot_delete_goal(self, id: int):
         def delete_goal():
+            reply = QMessageBox.question(self, 'Attention',"Are you sure to delete it?", QMessageBox.StandardButton.Ok, QMessageBox.StandardButton.Cancel)
+
+            if reply == QMessageBox.StandardButton.Cancel:
+                return
+            
             self.appData.remove_goal_by_id(id)
 
         return delete_goal

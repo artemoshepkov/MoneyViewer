@@ -1,0 +1,39 @@
+<html>
+
+    <head>
+        <title>Reference</title>
+        <script language="JavaScript">
+         <!--
+         function flipflop( id )
+         {
+          element = document.getElementById( id );
+          if( element )   
+             element.style.display = element.style.display == "none" ? "" : "none";   
+         }
+         -->
+        </script>
+    </head>
+    <body>
+		<h1>СПРАВКА ПО РАБОТЕ С MoneyViewer</h1>
+        <button onclick="window.location='index.html'">FAQ</button>
+        <button onclick="window.location='1.html'">Окно транзакций</button>
+        <button onclick="window.location='2.html'">Вкладка целей и аккаунтов</button>
+        <button onclick="window.location='3.html'">График расходов</button>
+        <button onclick="window.location='4.html'">Диаграмма расходов</button>        
+
+        <h2>4. Вкладка целей и аккаунтов</h2>
+        <p><img src="image/categoriatab.png"/></p>
+        <ul>
+            <h3><a href="javascript:flipflop('8');">Диаграмма расходов</a></h3>
+                <ul id="8" style="display: none;">
+                <p style="margin-left: 50px"><img src="image/categoriadiagram.png" style=""/> - Диаграмма, отображающая расходы по категориям за выбранный период.</p>
+                </ul>
+            <h3><a href="javascript:flipflop('9');">Добавить, удалить категорию</a></h3>
+                <ul id="9" style="display: none;">
+                <p style="margin-left: 50px"><img src="image/categorialist.png" style=""/> - Список категорий.</p>
+                <p style="margin-left: 50px"><img src="image/addaccountgoal.png" style=""/> - Кнопка добавления категории. Нажмите для добавления категории.</p>
+                <p style="margin-left: 50px"><img src="image/addcategoria.png" style=""/> - Окно добавления категории. Введите имя для категории и нажмите [Ок].</p>
+                <p style="margin-left: 50px"><img src="image/deletegoalaccount.png" style=""/> - Кнопка удаления категории. Нажмите для удаление категории.</p>
+                </ul>
+    </body>
+</html>
