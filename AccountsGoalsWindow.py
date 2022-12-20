@@ -166,12 +166,12 @@ class AccoountsGoalsWindow(QWidget):
         for goal in self.appData.get_goals():
                 itemLayout = QHBoxLayout()
 
-                itemLabel = QLabel(str(goal))
-                itemLabel.setStyleSheet("""
+                itemLabelMoneyAmount = QLabel(str(goal.name) + " " + str(goal.moneyAmount))
+                itemLabelMoneyAmount.setStyleSheet("""
                 QLabel {
                     font-size: 15px;  }
                         """)
-                itemLayout.addWidget(itemLabel)
+                itemLayout.addWidget(itemLabelMoneyAmount)
                 
                 progressBar = QProgressBar(textVisible=False)
                 progressBar.setMinimum(0)
@@ -187,12 +187,20 @@ class AccoountsGoalsWindow(QWidget):
                     """
                 )
 
+
                 if goal.moneyAmount > goal.finishMoneyAmount:
                     progressBar.setValue(goal.finishMoneyAmount)
                 else:
                     progressBar.setValue(goal.moneyAmount)
                 itemLayout.addWidget(progressBar)
 
+                itemLabelFinish = QLabel(str(goal.finishMoneyAmount))
+                itemLabelFinish.setStyleSheet("""
+                QLabel {
+                    font-size: 15px;  }
+                        """)
+                        
+                itemLayout.addWidget(itemLabelFinish)
                 buttonDelete = QPushButton("-")
                 buttonDelete.setMinimumWidth(25)
                 buttonDelete.setMaximumWidth(25)

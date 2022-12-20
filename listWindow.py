@@ -157,6 +157,16 @@ class ListWindow(QWidget):
             )
             itemLayout.addWidget(itemLabelCateg)
 
+            itemLabelDate = QLabel(str(item.registDate.year) + "-" + str(item.registDate.month) + "-" + str(item.registDate.day)) 
+            itemLabelDate.setStyleSheet(
+                """
+                QLabel {
+                    font-size: 14px;
+                }
+                """
+            )
+            itemLayout.addWidget(itemLabelDate, 1, Qt.AlignmentFlag.AlignHCenter)
+
             itemLabelPayment = QLabel(str(item)) 
             itemLabelPayment.setStyleSheet(
                 """

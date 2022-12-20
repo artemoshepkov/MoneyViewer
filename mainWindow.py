@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import *
 from PyQt6.QtCore import *
-from PyQt6.QtGui import QAction, QIcon
+from PyQt6.QtGui import QAction, QIcon, QKeySequence, QShortcut
 from PyQt6 import QtWebEngineWidgets
 
 import os
@@ -52,6 +52,13 @@ class MainWindow(QMainWindow):
 
         self.initUI()
     
+    def init_hot_keys(self):
+        quitSc = QShortcut(QKeySequence("Ctrl+Q"), self)
+        quitSc.activated.connect(QApplication.instance().quit)
+
+        referenceSc = QShortcut(QKeySequence("Ctrl+H"))
+        referenceSc.activated.connect(self.slot_open_reference)
+
     def initUI(self):        
         self.mainLayout = QHBoxLayout()
         self.setLayout(self.mainLayout)
@@ -67,20 +74,22 @@ class MainWindow(QMainWindow):
         menuBar.setStyleSheet("background-color: white")
         self.setMenuBar(menuBar)
 
-
-        fileMenu = QMenu("&File", self)
-        menuBar.addMenu(fileMenu)
+        mainMenu = QMenu("&Menu", self)
+        menuBar.addMenu(mainMenu)
         
         exportAction = QAction("&Export to CVS", self)
         exportAction.triggered.connect(self.slot_export_CVS)
-        fileMenu.addAction(exportAction)
+        mainMenu.addAction(exportAction)
 
-        referenceMenu = QMenu("&Reference", self)
-        menuBar.addMenu(referenceMenu)
-        
         referenceAction = QAction("&Help", self)
+        referenceAction.setShortcut("Ctrl+H")
         referenceAction.triggered.connect(self.slot_open_reference)
-        referenceMenu.addAction(referenceAction)
+        mainMenu.addAction(referenceAction)
+
+        exitAction = QAction("&Exit", self)
+        exitAction.setShortcut("Ctrl+Q")
+        exitAction.triggered.connect(QApplication.instance().quit)
+        mainMenu.addAction(exitAction)
 
     def init_left_part(self):
 
@@ -148,11 +157,16 @@ class MainWindow(QMainWindow):
         self.tabs.addTab(self.tabCatogories, "Categories")
 
     def update_balance(self):
-        self.balanceLabel.setText(str(self.appData.get_balance()))
+        self.balanceLabel.setText("Balance: " + str(self.appData.get_balance()))
 
     def slot_export_CVS(self):
         fileName = QFileDialog.getSaveFileName(self, "Save to CVS", os.getenv("HOME"))
-        
+
+        path = fileName[0] + ".cvs"
+
+        if path == ".cvs":
+            return
+
         categories = {}
         for c in self.appData.get_categories():
             categories[c.id] = c.name
@@ -163,18 +177,21 @@ class MainWindow(QMainWindow):
 
         transactions = self.appData.get_transactions()
         
-        with open(fileName[0], "w") as file:
-            writer = csv.writer(file)
+        try:
+            with open(path, "w") as file:
+                writer = csv.writer(file)
 
-            for tran in transactions:
-                writer.writerow([categories[tran.categoriaId], str(tran.registDate), str(tran.payment)])
+                for tran in transactions:
+                    writer.writerow([categories[tran.categoriaId], str(tran.registDate), str(tran.payment)])
 
-        reply = QMessageBox.question(self, 'Open file',"Do you wanna open it?", QMessageBox.StandardButton.Yes, QMessageBox.StandardButton.No)
+            reply = QMessageBox.question(self, 'Open file',"Do you wanna open it?", QMessageBox.StandardButton.Yes, QMessageBox.StandardButton.No)
 
-        if reply == QMessageBox.StandardButton.No:
+            if reply == QMessageBox.StandardButton.No:
+                return
+
+            os.system(path)
+        except:
             return
-
-        os.system(fileName[0])
         
 
     def slot_open_reference(self):
